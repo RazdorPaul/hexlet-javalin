@@ -20,6 +20,10 @@ public class HelloWorld {
         config.bundledPlugins.enableDevLogging();
         config.fileRenderer(new JavalinJte());
     });
+        app.get("/courses/test", ctx -> {
+            var debug = ctx.queryParam("debug");
+            ctx.render("test/debug.jte",model("debug", debug));
+        });
         app.get("/courses", ctx -> {
             var courses = Data.getCourses();
             var header = "List of courses";
