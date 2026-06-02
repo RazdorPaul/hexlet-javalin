@@ -1,9 +1,13 @@
 package org.example.hexlet;
 
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 
-import java.util.Map;
+import io.javalin.http.NotFoundResponse;
+import io.javalin.rendering.template.JavalinJte;
+import org.example.hexlet.dto.courses.CoursePage;
+import org.example.hexlet.dto.courses.CoursesPage;
+
+import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class HelloWorld {
     public static void main(String[] args) {
@@ -12,35 +16,23 @@ public class HelloWorld {
     }
 
     private static Javalin getApp() {
-        var app = Javalin.create(config -> config.bundledPlugins.enableDevLogging());
-        app.get("/hello", ctx -> {
-            var name = ctx.queryParam("name");
-            if (name != null) {
-                ctx.result("Hello, " + name + "!\n");
-            } else {
-                ctx.result("Hello, World!\n");
-            }
+        var app = Javalin.create(config -> {
+        config.bundledPlugins.enableDevLogging();
+        config.fileRenderer(new JavalinJte());
+    });
+        app.get("/courses", ctx -> {
+            var courses = Data.getCourses();
+            var header = "List of courses";
+            var page = new CoursesPage(courses, header);
+            ctx.render("courses/index.jte", model("page", page));
         });
-        app.get("/dynamic/{id}",
-                ctx -> ctx.result("you are on page /dynamic/"
-                        + ctx.pathParamAsClass("id", Integer.class).get()));
-        app.get("/dynamics/{first}/pages/{second}", ctx -> ctx.result(getPath(ctx)));
+        app.get("/courses/{id}", ctx -> {
+            var course = Data.getCourse(ctx.pathParamAsClass("id", Long.class).get())
+                    .orElseThrow(() -> new NotFoundResponse("Course not found"));
+            var header = course.getName();
+            var page = new CoursePage(course, header);
+            ctx.render("courses/show.jte", model("page", page));
+        });
         return app;
-    }
-
-    private static Map<String, Object> getHeaders(Context ctx) {
-        return Map.of(
-                "Method:", ctx.method(),
-                "URI: ", ctx.url(),
-                "Headers", ctx.headerMap(),
-                "Parameters:", ctx.queryParamMap()
-        );
-    }
-    private static String getPath(Context ctx) {
-        return new StringBuilder().append("You are on ").
-                append(ctx.pathParam("first")).
-                append(" page, ").
-                append(ctx.pathParam("second")).
-                append(" subpage").toString();
     }
 }
