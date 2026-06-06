@@ -1,4 +1,4 @@
-@import org.example.hexlet.dto.courses.CoursesPage
+@import org.example.hexlet.dto.CoursesPage
 
 @param CoursesPage page
 @param String term

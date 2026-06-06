@@ -15,6 +15,7 @@
     <nav>
         <a href="/">Главная</a>
         <a href="/courses">Courses</a>
+        <a href="/users">Users</a>
     </nav>
 </header>
 <main>${content}</main>
