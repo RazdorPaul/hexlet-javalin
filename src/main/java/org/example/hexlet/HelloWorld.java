@@ -3,7 +3,12 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 
 import io.javalin.http.NotFoundResponse;
+import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinJte;
+import io.javalin.validation.ValidationException;
+import org.apache.commons.lang3.StringUtils;
+import org.example.hexlet.dto.BuildCoursePage;
+import org.example.hexlet.dto.BuildUserPage;
 import org.example.hexlet.dto.CoursePage;
 import org.example.hexlet.dto.CoursesPage;
 import org.example.hexlet.dto.UserPage;
@@ -14,6 +19,7 @@ import org.example.hexlet.repositories.InMemoryCourseRepository;
 import org.example.hexlet.repositories.InMemoryUserRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
@@ -29,7 +35,15 @@ public class HelloWorld {
         var app = Javalin.create(config -> {
         config.bundledPlugins.enableDevLogging();
         config.fileRenderer(new JavalinJte());
+        config.staticFiles.add(staticFiles -> {
+            staticFiles.hostedPath = "/";
+            staticFiles.directory = "/public";
+            staticFiles.location = Location.CLASSPATH;
+            });
     });
+        app.get("/", ctx ->{
+            ctx.render("index.jte");
+        });
         app.get("/courses/test", ctx -> {
             var debug = ctx.queryParam("debug");
             ctx.render("test/debug.jte",model("debug", debug));
@@ -51,22 +65,30 @@ public class HelloWorld {
             ctx.render("users/index.jte", model("page", page, "term", term));
         });
         app.get("/courses/new", ctx -> {
-            ctx.render("courses/new.jte");
+            var page = new BuildCoursePage();
+            ctx.render("courses/new.jte", model("page", page));
         });
         app.post("/courses", ctx -> {
-            var name = ctx.formParam("name");
-            var description = ctx.formParam("description");
-            if (name == null || name.isBlank()) {
-                ctx.status(422).result("Поле обязательно для заполнения!");
-                return;
+            try {
+                var name = ctx.formParamAsClass("name", String.class).
+                        check(value -> value != null
+                                && !value.isBlank()
+                                && value.length() > 2, "Название курса не соответствует требованиям!").
+                        get();
+                var description = ctx.formParamAsClass("description", String.class).
+                        check(value -> value != null
+                                && !value.isBlank()
+                                && value.length() > 10, "Описание курса не соответствует требованиям!").
+                        get();
+                var course = new Course(name, description);
+                courseRepository.save(course);
+                ctx.redirect("/courses");
+            } catch (ValidationException err) {
+                var name = ctx.formParam("name");
+                var description = ctx.formParam("description");
+                var page = new BuildCoursePage(name, description, err.getErrors());
+                ctx.render("courses/new.jte", model("page", page));
             }
-            if (description == null || description.isBlank()) {
-                ctx.status(422).result("Поле обязательно для заполнения!");
-                return;
-            }
-            var course = new Course(name, description);
-            courseRepository.save(course);
-            ctx.redirect("/courses");
         });
         app.get("/courses/{id}", ctx -> {
             var course = courseRepository.findById(ctx.pathParamAsClass("id", Long.class).get())
@@ -76,37 +98,47 @@ public class HelloWorld {
             ctx.render("courses/show.jte", model("page", page));
         });
         app.get("/users/new", ctx -> {
-            ctx.render("users/new.jte");
+            var page = new BuildUserPage();
+            ctx.render("users/new.jte", model("page", page));
         });
         app.post("/users", ctx -> {
-            var firstName = ctx.formParam("firstName");
-            if (firstName == null || firstName.isBlank()) {
-                ctx.status(422).result("Поле обязательно для заполнения!");
-                return;
-            }
-            var lastName = ctx.formParam("lastName");
-            if (lastName == null || lastName.isBlank()) {
-                ctx.status(422).result("Поле обязательно для заполнения!");
-                return;
-            }
-            var email = ctx.formParam("email");
-            if (email == null || email.isBlank()) {
-                ctx.status(422).result("Поле обязательно для заполнения!");
-                return;
-            } else {
-                email = email.toLowerCase().strip();
-            }
-            Integer age;
-            var  rawAge = ctx.formParam("age");
             try {
-                age = Integer.parseInt(rawAge);
-            } catch (NumberFormatException e) {
-                ctx.status(422).result("Возраст должен быть числом");
-                return;
+                var firstName = ctx.formParamAsClass("firstName", String.class).
+                        check(value -> value != null && !value.isBlank(), "Вы не указали имя!").
+                        get();
+                var lastName = ctx.formParamAsClass("lastName", String.class).
+                        check(value -> value != null && !value.isBlank(), "Вы не указали фамилию!").
+                        get();
+                var email = ctx.formParamAsClass("email", String.class).
+                        check(value -> value != null && !value.isBlank(), "Вы не указали электронную почту!").
+                        get();
+                var phone = ctx.formParamAsClass("phone", String.class).
+                        check(value -> value != null && !value.isBlank(), "Вы не указали номер телефона!").
+                        get();
+                var age = ctx.formParamAsClass("age", Integer.class).
+                        check(Objects::nonNull, "Вы не указали возраст!").
+                        get();
+                var passwordConfirmation = ctx.formParam("passwordConfirmation");
+                var password = ctx.formParamAsClass("password", String.class).
+                        check(pass -> Objects.equals(pass, passwordConfirmation) && !pass.isBlank(), "Пароли не совпадают").get();
+                email = email.toLowerCase().strip();
+                lastName = StringUtils.capitalize(lastName.toLowerCase()).strip();
+                firstName = StringUtils.capitalize(firstName.toLowerCase()).strip();
+                var user = new User(firstName, lastName, email, phone, age, password);
+                usersRepository.save(user);
+                ctx.redirect("/users");
+            } catch (ValidationException e) {
+                var firstName = ctx.formParam("firstName");
+                var lastName = ctx.formParam("lastName");
+                var email = ctx.formParam("email");
+                var phone = ctx.formParam("phone");
+                Integer age = null;
+                try {
+                    age = Integer.parseInt(ctx.formParam("age"));
+                } catch (NumberFormatException ex) {}
+                var page = new BuildUserPage(firstName, lastName, email, phone, age, e.getErrors());
+                ctx.render("users/new.jte", model("page", page));
             }
-            var user = new User(firstName, lastName, email, age);
-            usersRepository.save(user);
-            ctx.redirect("/users");
         });
         app.get("/users/{id}", ctx -> {
             var user = usersRepository.findById(ctx.pathParamAsClass("id", Long.class).get())

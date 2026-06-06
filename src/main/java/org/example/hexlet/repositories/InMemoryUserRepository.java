@@ -16,10 +16,30 @@ public class InMemoryUserRepository implements UserRepository{
     }
 
     private void initUsers() {
-        save(new User("Paul", "Razdorozhnyy", "kaisergars@gmail.com", 36));
-        save(new User("John", "Doe", "john.doe@example.com", 25));
-        save(new User("Jane", "Smith", "jane.smith@example.com", 30));
-        save(new User("Bob", "Johnson", "bob.johnson@example.com", 35));
+        save(new User("Paul",
+                "Razdorozhnyy",
+                "kaisergars@gmail.com",
+                "+79148001532",
+                36,
+                "pass1"));
+        save(new User("John",
+                "Doe",
+                "john.doe@example.com",
+                "+79246549385",
+                25,
+                "pass2"));
+        save(new User("Jane",
+                "Smith",
+                "jane.smith@example.com",
+                "+79245009338",
+                30,
+                "pass3"));
+        save(new User("Bob",
+                "Johnson",
+                "bob.johnson@example.com",
+                "+79245721110",
+                35,
+                "pass4"));
     }
 
     @Override
