@@ -1,4 +1,5 @@
 @import gg.jte.Content
+@import org.example.hexlet.NamedRoutes
 
 @param Content content
 @param String title = "Hexlet Project"
@@ -16,9 +17,9 @@
     <div class="container">
         <h1 class="header-title">My App</h1>
         <nav class="nav">
-            <a href="/" class="nav-link">Главная</a>
-            <a href="/courses" class="nav-link">Courses</a>
-            <a href="/users" class="nav-link">Users</a>
+            <a href="${NamedRoutes.mainPath()}" class="nav-link">Главная</a>
+            <a href="${NamedRoutes.coursesPath()}" class="nav-link">Courses</a>
+            <a href="${NamedRoutes.usersPath()}" class="nav-link">Users</a>
         </nav>
     </div>
 </header>

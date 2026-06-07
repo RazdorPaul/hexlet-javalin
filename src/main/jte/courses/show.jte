@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.CoursePage
 
 @param CoursePage page
@@ -17,7 +18,7 @@ content = @`
         </p>
 
         <div style="margin-top: 2rem;">
-            <a href="/courses" class="btn btn-secondary">← Назад к списку курсов</a>
+            <a href="${NamedRoutes.coursesPath()}" class="btn btn-secondary">← Назад к списку курсов</a>
         </div>
     </div>
 `

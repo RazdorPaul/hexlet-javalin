@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.BuildUserPage
 
 @param BuildUserPage page
@@ -21,7 +22,7 @@ content = @`
             </div>
         @endif
 
-        <form method="POST" action="/users">
+        <form method="POST" action="${NamedRoutes.usersPath()}">
             <div class="form-group">
                 <label for="firstName">Имя</label>
                 <input type="text"
@@ -79,7 +80,7 @@ content = @`
 
             <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
                 <button type="submit" class="btn btn-success">Добавить пользователя</button>
-                <a href="/users" class="btn btn-secondary">Отмена</a>
+                <a href="${NamedRoutes.usersPath()}" class="btn btn-secondary">Отмена</a>
             </div>
         </form>
     </div>

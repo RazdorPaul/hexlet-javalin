@@ -1,3 +1,5 @@
+@import org.example.hexlet.NamedRoutes
+
 @template.layout(
 title = "Главная",
 content = @`
@@ -7,8 +9,8 @@ content = @`
             Это учебное приложение для управления пользователями и курсами.
         </p>
         <div class="hero-buttons">
-            <a href="/users" class="btn btn-primary">Пользователи</a>
-            <a href="/courses" class="btn btn-secondary">Курсы</a>
+            <a href="${NamedRoutes.usersPath()}" class="btn btn-primary">Пользователи</a>
+            <a href="${NamedRoutes.coursesPath()}" class="btn btn-secondary">Курсы</a>
         </div>
     </div>
 `

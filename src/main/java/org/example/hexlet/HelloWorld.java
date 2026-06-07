@@ -41,14 +41,14 @@ public class HelloWorld {
             staticFiles.location = Location.CLASSPATH;
             });
     });
-        app.get("/", ctx ->{
+        app.get(NamedRoutes.mainPath(), ctx ->{
             ctx.render("index.jte");
         });
-        app.get("/courses/test", ctx -> {
+        app.get(NamedRoutes.coursesTestPath(), ctx -> {
             var debug = ctx.queryParam("debug");
             ctx.render("test/debug.jte",model("debug", debug));
         });
-        app.get("/courses", ctx -> {
+        app.get(NamedRoutes.coursesPath(), ctx -> {
             var term = ctx.queryParam("term");
             List<Course> courses;
             courses = courseRepository.findByNameOrDescription(term);
@@ -56,7 +56,7 @@ public class HelloWorld {
             var page = new CoursesPage(courses, header);
             ctx.render("courses/index.jte", model("page", page, "term", term));
         });
-        app.get("/users", ctx -> {
+        app.get(NamedRoutes.usersPath(), ctx -> {
             var term = ctx.queryParam("term");
             List<User> users;
             users = usersRepository.findByFirstNameStartingWith(term);
@@ -64,11 +64,11 @@ public class HelloWorld {
             var page = new UsersPage(users, header);
             ctx.render("users/index.jte", model("page", page, "term", term));
         });
-        app.get("/courses/new", ctx -> {
+        app.get(NamedRoutes.coursesNewPath(), ctx -> {
             var page = new BuildCoursePage();
             ctx.render("courses/new.jte", model("page", page));
         });
-        app.post("/courses", ctx -> {
+        app.post(NamedRoutes.coursesPath(), ctx -> {
             try {
                 var name = ctx.formParamAsClass("name", String.class).
                         check(value -> value != null
@@ -82,7 +82,7 @@ public class HelloWorld {
                         get();
                 var course = new Course(name, description);
                 courseRepository.save(course);
-                ctx.redirect("/courses");
+                ctx.redirect(NamedRoutes.coursesPath());
             } catch (ValidationException err) {
                 var name = ctx.formParam("name");
                 var description = ctx.formParam("description");
@@ -90,18 +90,18 @@ public class HelloWorld {
                 ctx.render("courses/new.jte", model("page", page));
             }
         });
-        app.get("/courses/{id}", ctx -> {
+        app.get(NamedRoutes.coursePath("{id}"), ctx -> {
             var course = courseRepository.findById(ctx.pathParamAsClass("id", Long.class).get())
                     .orElseThrow(() -> new NotFoundResponse("Course not found"));
             var header = course.getName();
             var page = new CoursePage(course, header);
             ctx.render("courses/show.jte", model("page", page));
         });
-        app.get("/users/new", ctx -> {
+        app.get(NamedRoutes.usersNewPath(), ctx -> {
             var page = new BuildUserPage();
             ctx.render("users/new.jte", model("page", page));
         });
-        app.post("/users", ctx -> {
+        app.post(NamedRoutes.usersPath(), ctx -> {
             try {
                 var firstName = ctx.formParamAsClass("firstName", String.class).
                         check(value -> value != null && !value.isBlank(), "Вы не указали имя!").
@@ -126,7 +126,7 @@ public class HelloWorld {
                 firstName = StringUtils.capitalize(firstName.toLowerCase()).strip();
                 var user = new User(firstName, lastName, email, phone, age, password);
                 usersRepository.save(user);
-                ctx.redirect("/users");
+                ctx.redirect(NamedRoutes.usersPath());
             } catch (ValidationException e) {
                 var firstName = ctx.formParam("firstName");
                 var lastName = ctx.formParam("lastName");
@@ -140,7 +140,7 @@ public class HelloWorld {
                 ctx.render("users/new.jte", model("page", page));
             }
         });
-        app.get("/users/{id}", ctx -> {
+        app.get(NamedRoutes.userPath("{id}"), ctx -> {
             var user = usersRepository.findById(ctx.pathParamAsClass("id", Long.class).get())
                     .orElseThrow(() -> new NotFoundResponse("User not found"));
             var header = user.getFirstName() + " " + user.getLastName();

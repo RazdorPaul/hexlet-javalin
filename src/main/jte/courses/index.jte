@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.CoursesPage
 @import org.example.hexlet.model.Course
 
@@ -9,11 +10,11 @@ title = "Список курсов",
 content = @`
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h1>Список курсов</h1>
-        <a href="/courses/new" class="btn btn-success">+ Создать курс</a>
+        <a href="${NamedRoutes.coursesNewPath()}" class="btn btn-success">+ Создать курс</a>
     </div>
 
     <div class="card">
-        <form method="GET" action="/courses" style="display: flex; gap: 0.5rem;">
+        <form method="GET" action="${NamedRoutes.coursesPath()}" style="display: flex; gap: 0.5rem;">
             <input type="text"
                    name="term"
                    value="${term != null ? term : ""}"
@@ -44,7 +45,7 @@ content = @`
                     <td>${course.getName()}</td>
                     <td style="max-width: 400px;">${course.getDescription()}</td>
                     <td>
-                        <a href="/courses/${course.getId()}" class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Просмотр</a>
+                        <a href="${NamedRoutes.coursePath(course.getId())}" class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Просмотр</a>
                     </td>
                 </tr>
             @endfor

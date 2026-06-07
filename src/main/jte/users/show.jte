@@ -1,3 +1,4 @@
+@import org.example.hexlet.NamedRoutes
 @import org.example.hexlet.dto.UserPage
 
 @param UserPage page
@@ -17,7 +18,7 @@ content = @`
         </div>
 
         <div style="margin-top: 2rem;">
-            <a href="/users" class="btn btn-secondary">← Назад к списку пользователей</a>
+            <a href="${NamedRoutes.usersPath()}" class="btn btn-secondary">← Назад к списку пользователей</a>
         </div>
     </div>
 `
