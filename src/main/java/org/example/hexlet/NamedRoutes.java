@@ -18,12 +18,21 @@ public final class NamedRoutes {
     }
 
     public static String coursesTestPath() {
-        return "/courses/test";
+        return "/test";
     }
 
     public static String coursesNewPath() {
         return "/courses/new";
     }
+
+    public static String editCoursePath(String id) {
+        return coursesPath() + "/" + id + "/edit";
+    }
+
+    public static String editCoursePath(Long id) {
+        return editCoursePath(String.valueOf(id));
+    }
+
     public static String usersPath() {
         return "/users";
     }
@@ -38,5 +47,13 @@ public final class NamedRoutes {
 
     public static String usersNewPath() {
         return "/users/new";
+    }
+
+    public static String editUserPath(String id) {
+        return usersPath() + "/" + id + "/edit";
+    }
+
+    public static String editUserPath(Long id) {
+        return editUserPath(String.valueOf(id));
     }
 }

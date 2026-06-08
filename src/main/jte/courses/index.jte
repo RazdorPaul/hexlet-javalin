@@ -44,8 +44,20 @@ content = @`
                     <td>${course.getId()}</td>
                     <td>${course.getName()}</td>
                     <td style="max-width: 400px;">${course.getDescription()}</td>
-                    <td>
+                    <!-- Добавил display: flex и gap для ровного расположения кнопок -->
+                    <td style="display: flex; gap: 0.5rem;">
                         <a href="${NamedRoutes.coursePath(course.getId())}" class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Просмотр</a>
+
+                        <!-- ВОТ ОНА, ДОБАВЛЕННАЯ КНОПКА РЕДАКТИРОВАНИЯ -->
+                        <a href="${NamedRoutes.editCoursePath(course.getId())}" class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Редактировать</a>
+
+                        <button type="button" class="btn btn-danger" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;"
+                                onclick="if(confirm('Вы действительно хотите удалить этот курс?')) {
+                                    fetch('${NamedRoutes.coursePath(course.getId())}', { method: 'DELETE' })
+                                    .then(() => window.location.href = '${NamedRoutes.coursesPath()}');
+                                }">
+                            Удалить
+                        </button>
                     </td>
                 </tr>
             @endfor

@@ -73,8 +73,18 @@ public class InMemoryUserRepository implements UserRepository{
 
     @Override
     public User save(User user) {
-        user.setId(nextId++);
-        users.add(user);
+        var id = user.getId();
+        if (id != null) {
+            for (var i = 0; i < users.size(); i++) {
+                if (users.get(i).getId().equals(id)) {
+                    users.set(i, user);
+                    break;
+                }
+            }
+        } else {
+            user.setId(nextId++);
+            users.add(user);
+        }
         return user;
     }
 

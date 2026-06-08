@@ -19,6 +19,14 @@ content = @`
 
         <div style="margin-top: 2rem;">
             <a href="${NamedRoutes.coursesPath()}" class="btn btn-secondary">← Назад к списку курсов</a>
+            <a href="${NamedRoutes.editCoursePath(page.getCourse().getId())}" class="btn btn-primary">Редактировать курс</a>
+            <button type="button" class="btn btn-danger"
+                    onclick="if(confirm('Вы действительно хотите удалить этот курс?')) {
+                        fetch('${NamedRoutes.coursePath(page.getCourse().getId())}', { method: 'DELETE' })
+                        .then(() => window.location.href = '${NamedRoutes.coursesPath()}');
+                    }">
+                Удалить курс
+            </button>
         </div>
     </div>
 `

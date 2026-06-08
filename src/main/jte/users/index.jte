@@ -44,8 +44,20 @@ content = @`
                     <td>${user.getId()}</td>
                     <td>${user.getFirstName()}</td>
                     <td>${user.getLastName()}</td>
-                    <td>
+                    <!-- Добавил style="display: flex; gap: 0.5rem;" для ровного расположения кнопок -->
+                    <td style="display: flex; gap: 0.5rem;">
                         <a href="${NamedRoutes.userPath(user.getId())}" class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Просмотр</a>
+
+                        <!-- ВОТ ОНА, ДОБАВЛЕННАЯ КНОПКА РЕДАКТИРОВАНИЯ -->
+                        <a href="${NamedRoutes.editUserPath(user.getId())}" class="btn btn-primary" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Редактировать</a>
+
+                        <button type="button" class="btn btn-danger" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;"
+                                onclick="if(confirm('Вы действительно хотите удалить этого пользователя?')) {
+                                   fetch('${NamedRoutes.userPath(user.getId())}', { method: 'DELETE' })
+                                   .then(() => window.location.href = '${NamedRoutes.usersPath()}');
+                                }">
+                            Удалить
+                        </button>
                     </td>
                 </tr>
             @endfor

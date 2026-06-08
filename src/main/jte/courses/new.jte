@@ -2,12 +2,16 @@
 @import org.example.hexlet.dto.BuildCoursePage
 
 @param BuildCoursePage page
+@param String header
+@param String actionUrl
+@param String method
+@param String buttonText
 
 @template.layout(
-title = "Новый курс",
+title = header,
 content = @`
     <div class="card" style="max-width: 600px; margin: 0 auto;">
-        <h1 style="margin-bottom: 1.5rem;">Новый курс</h1>
+        <h1 style="margin-bottom: 1.5rem;">"${header}"</h1>
         @if(page.getErrors() != null && !page.getErrors().isEmpty())
             <div class="alert-error">
                 <strong>Пожалуйста, исправьте следующие ошибки:</strong>
@@ -21,7 +25,7 @@ content = @`
             </div>
         @endif
 
-        <form method="POST" action="${NamedRoutes.coursesPath()}">
+        <form method="${method}" action="${actionUrl}">
             <div class="form-group">
                 <label for="name">Название курса</label>
                 <input type="text" id="name" name="name"
@@ -38,7 +42,7 @@ content = @`
             </div>
 
             <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
-                <button type="submit" class="btn btn-success">Добавить курс</button>
+                <button type="submit" class="btn btn-success">${buttonText}</button>
                 <a href="${NamedRoutes.coursesPath()}" class="btn btn-secondary">Отмена</a>
             </div>
         </form>

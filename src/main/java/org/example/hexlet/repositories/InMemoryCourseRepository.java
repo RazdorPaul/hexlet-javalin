@@ -57,8 +57,18 @@ public class InMemoryCourseRepository implements CourseRepository{
 
     @Override
     public Course save(Course course) {
-        course.setId(nextId++);
-        courses.add(course);
+        var id = course.getId();
+        if (id != null) {
+            for (var i = 0; i < courses.size(); i++) {
+                if (courses.get(i).getId().equals(id)) {
+                    courses.set(i, course);
+                    break;
+                }
+            }
+        } else {
+            course.setId(nextId++);
+            courses.add(course);
+        }
         return course;
     }
 

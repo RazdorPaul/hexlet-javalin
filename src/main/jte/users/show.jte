@@ -17,8 +17,20 @@ content = @`
             <p><strong>Возраст:</strong> ${page.getUser().getAge()} лет</p>
         </div>
 
-        <div style="margin-top: 2rem;">
-            <a href="${NamedRoutes.usersPath()}" class="btn btn-secondary">← Назад к списку пользователей</a>
+        <!-- Добавил display: flex и gap, чтобы кнопки стояли ровно в ряд -->
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+            <a href="${NamedRoutes.usersPath()}" class="btn btn-secondary">← Назад к списку</a>
+
+            <!-- КНОПКА РЕДАКТИРОВАНИЯ -->
+            <a href="${NamedRoutes.editUserPath(page.getUser().getId())}" class="btn btn-primary">Редактировать</a>
+
+            <button type="button" class="btn btn-danger"
+                    onclick="if(confirm('Вы действительно хотите удалить этого пользователя?')) {
+                        fetch('${NamedRoutes.userPath(page.getUser().getId())}', { method: 'DELETE' })
+                        .then(() => window.location.href = '${NamedRoutes.usersPath()}');
+                    }">
+                Удалить
+            </button>
         </div>
     </div>
 `
