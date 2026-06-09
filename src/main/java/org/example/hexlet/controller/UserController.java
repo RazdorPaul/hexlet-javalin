@@ -111,7 +111,7 @@ public class UserController {
                                                              "header", header,
                                                              "actionUrl", NamedRoutes.userPath(id),
                                                              "buttonText", "Сохранить изменения",
-                                                             "method", "PUT"));
+                                                             "method", "POST"));
 
     }
 

@@ -81,7 +81,7 @@ public final class CourseController {
         var page = new BuildCoursePage(course.getName(), course.getDescription(), Map.of());
         ctx.render("courses/new.jte", model("page", page,
                 "header", "Редактирование курса",
-                "method", "PUT",
+                "method", "POST",
                 "actionUrl", NamedRoutes.coursePath(id),
                 "buttonText", "Сохранить изменения"));
 

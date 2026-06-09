@@ -1,9 +1,9 @@
 @import gg.jte.Content
 @import org.example.hexlet.NamedRoutes
+@import org.example.hexlet.dto.MainPage
 
 @param Content content
 @param String title = "Hexlet Project"
-
 <!doctype html>
 <html lang="ru">
 <head>
@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
 <header class="header">
     <div class="container">
         <h1 class="header-title">My App</h1>

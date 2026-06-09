@@ -7,6 +7,9 @@ import org.example.hexlet.controller.CourseController;
 import org.example.hexlet.controller.MainController;
 import org.example.hexlet.controller.UserController;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class HelloWorld {
     public static void main(String[] args) {
         var app = getApp();
@@ -23,6 +26,9 @@ public class HelloWorld {
             staticFiles.location = Location.CLASSPATH;
             });
     });
+        app.before(ctx -> {
+            System.out.println("Дата и время запроса " + ctx.method() + " " +LocalDate.now() + " " + LocalTime.now());
+        });
         app.get(NamedRoutes.mainPath(), MainController::mainPage);
         app.get(NamedRoutes.coursesTestPath(), MainController::testPage);
         app.get(NamedRoutes.coursesPath(), CourseController::index);
@@ -31,13 +37,13 @@ public class HelloWorld {
         app.post(NamedRoutes.coursesPath(), CourseController::create);
         app.get(NamedRoutes.coursePath("{id}"), CourseController::show);
         app.get(NamedRoutes.editCoursePath("{id}"), CourseController::edit);
-        app.put(NamedRoutes.coursePath("{id}"), CourseController::update);
+        app.post(NamedRoutes.coursePath("{id}"), CourseController::update);
         app.delete(NamedRoutes.coursePath("{id}"), CourseController::destroy);
         app.get(NamedRoutes.usersNewPath(), UserController::build);
         app.post(NamedRoutes.usersPath(), UserController::create);
         app.get(NamedRoutes.userPath("{id}"), UserController::show);
         app.get(NamedRoutes.editUserPath("{id}"), UserController::edit);
-        app.put(NamedRoutes.userPath("{id}"), UserController::update);
+        app.post(NamedRoutes.userPath("{id}"), UserController::update);
         app.delete(NamedRoutes.userPath("{id}"), UserController::destroy);
         return app;
     }
