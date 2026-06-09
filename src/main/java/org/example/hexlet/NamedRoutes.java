@@ -56,4 +56,12 @@ public final class NamedRoutes {
     public static String editUserPath(Long id) {
         return editUserPath(String.valueOf(id));
     }
+
+    public static String buildSessionPath() {
+        return "/sessions/build";
+    }
+
+    public static String sessionsPath() {
+        return "/sessions";
+    }
 }

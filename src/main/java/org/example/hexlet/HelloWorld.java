@@ -5,6 +5,7 @@ import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinJte;
 import org.example.hexlet.controller.CourseController;
 import org.example.hexlet.controller.MainController;
+import org.example.hexlet.controller.SessionController;
 import org.example.hexlet.controller.UserController;
 
 import java.time.LocalDate;
@@ -45,6 +46,9 @@ public class HelloWorld {
         app.get(NamedRoutes.editUserPath("{id}"), UserController::edit);
         app.post(NamedRoutes.userPath("{id}"), UserController::update);
         app.delete(NamedRoutes.userPath("{id}"), UserController::destroy);
+        app.get(NamedRoutes.buildSessionPath(), SessionController::build);
+        app.post(NamedRoutes.sessionsPath(), SessionController::create);
+        app.delete(NamedRoutes.sessionsPath(), SessionController::destroy);
         return app;
     }
 }

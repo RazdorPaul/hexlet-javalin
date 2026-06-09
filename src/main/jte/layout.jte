@@ -33,6 +33,7 @@
 
 <footer class="footer">
     <div class="container">
+        <a href="${NamedRoutes.buildSessionPath()}">Войти</a>
         <a href="https://github.com/RazdorPaul" class="footer-link">Мой GitHub</a>
     </div>
 </footer>
