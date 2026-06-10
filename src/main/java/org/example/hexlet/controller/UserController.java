@@ -56,6 +56,7 @@ public class UserController {
             firstName = StringUtils.capitalize(firstName.toLowerCase()).strip();
             var user = new User(firstName, lastName, email, phone, age, password);
             usersRepository.save(user);
+            ctx.sessionAttribute("flash", "Пользователь успешно добавлен!");
             ctx.redirect(NamedRoutes.usersPath());
         } catch (ValidationException e) {
             var firstName = ctx.formParam("firstName");
@@ -83,6 +84,7 @@ public class UserController {
         users = usersRepository.findByFirstNameStartingWith(term);
         var header = "List of users";
         var page = new UsersPage(users, header);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("users/index.jte", model("page", page, "term", term));
     }
 
@@ -91,6 +93,7 @@ public class UserController {
                 .orElseThrow(() -> new NotFoundResponse("User not found"));
         var header = user.getFirstName() + " " + user.getLastName();
         var page = new UserPage(user, header);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("users/show.jte", model("page", page));
     }
 
@@ -151,6 +154,7 @@ public class UserController {
             user.setPhone(phone);
             user.setAge(age);
             usersRepository.save(user);
+            ctx.sessionAttribute("flash", "Данные пользователя успешно обновлены!");
             ctx.redirect(NamedRoutes.userPath(id));
         } catch (ValidationException e) {
             var firstName = ctx.formParam("firstName");
@@ -167,7 +171,7 @@ public class UserController {
             ctx.render("users/new.jte", model("page", page,
                     "header", header,
                     "buttonText", "Сохранить изменения",
-                    "method", "PUT",
+                    "method", "POST",
                     "actionUrl", NamedRoutes.userPath(id)));
         }
     }
@@ -176,6 +180,7 @@ public class UserController {
         var user = usersRepository.findById(ctx.pathParamAsClass("id", Long.class).get())
                 .orElseThrow(() -> new NotFoundResponse("User not found"));
         usersRepository.delete(user.getId());
+        ctx.sessionAttribute("flash", "Пользователь успешно удален!");
         ctx.redirect(NamedRoutes.usersPath());
     }
 }

@@ -4,6 +4,7 @@
 @param CoursePage page
 
 @template.layout(
+page = page,
 title = page.getCourse().getName(),
 content = @`
     <div class="card">

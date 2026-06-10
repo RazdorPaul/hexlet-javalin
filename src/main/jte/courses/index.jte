@@ -6,6 +6,7 @@
 @param String term
 
 @template.layout(
+page = page,
 title = "Список курсов",
 content = @`
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">

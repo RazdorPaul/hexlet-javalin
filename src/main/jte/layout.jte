@@ -1,9 +1,11 @@
 @import gg.jte.Content
 @import org.example.hexlet.NamedRoutes
-@import org.example.hexlet.dto.MainPage
+@import org.example.hexlet.dto.Page
 
 @param Content content
 @param String title = "Hexlet Project"
+@param Page page
+
 <!doctype html>
 <html lang="ru">
 <head>
@@ -13,7 +15,13 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-
+@if (page != null)
+    @if (page.getFlash() != null)
+        <p class="alert alert-success">
+            ${page.getFlash()}
+        </p>
+    @endif
+@endif
 <header class="header">
     <div class="container">
         <h1 class="header-title">My App</h1>

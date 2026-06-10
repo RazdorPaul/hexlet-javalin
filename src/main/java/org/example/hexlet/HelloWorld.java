@@ -48,7 +48,7 @@ public class HelloWorld {
         app.delete(NamedRoutes.userPath("{id}"), UserController::destroy);
         app.get(NamedRoutes.buildSessionPath(), SessionController::build);
         app.post(NamedRoutes.sessionsPath(), SessionController::create);
-        app.delete(NamedRoutes.sessionsPath(), SessionController::destroy);
+        app.post(NamedRoutes.deleteSessionPath(), SessionController::destroy);
         return app;
     }
 }

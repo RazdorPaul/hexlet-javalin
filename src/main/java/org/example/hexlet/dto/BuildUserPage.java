@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class BuildUserPage {
+public class BuildUserPage extends Page{
     private String firstName;
     private String lastName;
     private String email;

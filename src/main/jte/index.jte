@@ -4,6 +4,7 @@
 @param MainPage page
 
 @template.layout(
+page = page,
 title = "Главная",
 content = @`
     <div class="hero">

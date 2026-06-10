@@ -6,7 +6,7 @@ import org.example.hexlet.model.User;
 
 @AllArgsConstructor
 @Getter
-public class UserPage {
+public class UserPage extends Page{
     private User user;
     private String header;
 }

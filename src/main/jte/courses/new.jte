@@ -9,11 +9,12 @@
 
 @template.layout(
 title = header,
+page = page,
 content = @`
     <div class="card" style="max-width: 600px; margin: 0 auto;">
         <h1 style="margin-bottom: 1.5rem;">"${header}"</h1>
         @if(page.getErrors() != null && !page.getErrors().isEmpty())
-            <div class="alert-error">
+            <div class="alert alert-error">
                 <strong>Пожалуйста, исправьте следующие ошибки:</strong>
                 <ul>
                     @for(var validator : page.getErrors().values())

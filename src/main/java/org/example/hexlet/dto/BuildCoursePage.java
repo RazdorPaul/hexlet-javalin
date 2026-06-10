@@ -11,7 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class BuildCoursePage {
+public class BuildCoursePage extends Page{
     private String name;
     private String description;
     private Map<String, List<ValidationError<Object>>> errors;

@@ -7,7 +7,7 @@ import org.example.hexlet.model.Course;
 
 @AllArgsConstructor
 @Getter
-public class CoursePage {
+public class CoursePage extends Page{
     private Course course;
     private String header;
 }

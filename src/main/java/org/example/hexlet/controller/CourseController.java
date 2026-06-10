@@ -43,6 +43,7 @@ public final class CourseController {
                     get();
             var course = new Course(name, description);
             coursesRepository.save(course);
+            ctx.sessionAttribute("flash", "Курс успешно добавлен");
             ctx.redirect(NamedRoutes.coursesPath());
         } catch (ValidationException err) {
             var name = ctx.formParam("name");
@@ -63,6 +64,7 @@ public final class CourseController {
         courses = coursesRepository.findByNameOrDescription(term);
         var header = "List of courses";
         var page = new CoursesPage(courses, header);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("courses/index.jte", model("page", page, "term", term));
     }
 
@@ -71,6 +73,7 @@ public final class CourseController {
                 .orElseThrow(() -> new NotFoundResponse("Course not found"));
         var header = course.getName();
         var page = new CoursePage(course, header);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("courses/show.jte", model("page", page));
     }
 
@@ -105,6 +108,7 @@ public final class CourseController {
             course.setName(name);
             course.setDescription(description);
             coursesRepository.save(course);
+            ctx.sessionAttribute("flash", "Курс успешно перезаписан!");
             ctx.redirect(NamedRoutes.coursePath(id));
         } catch (ValidationException err) {
             var name = ctx.formParam("name");
@@ -115,7 +119,7 @@ public final class CourseController {
                     "header", "Изменение курса",
                     "actionUrl", NamedRoutes.coursePath(id),
                     "buttonText", "Сохранить изменения",
-                    "method", "PUT"));
+                    "method", "POST"));
         }
     }
 
@@ -123,6 +127,7 @@ public final class CourseController {
         var course = coursesRepository.findById(ctx.pathParamAsClass("id", Long.class).get())
                 .orElseThrow(() -> new NotFoundResponse("Course not found"));
         coursesRepository.delete(course.getId());
+        ctx.sessionAttribute("flash", "Курс успешно удален!");
         ctx.redirect(NamedRoutes.coursesPath());
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class CoursesPage {
+public class CoursesPage extends Page{
     private List<Course> courses;
     private String header;
 }
